@@ -1,12 +1,10 @@
 from flask import Flask
 
+from web.base.routes import base
+
 app = Flask(__name__)
-
-
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
+app.register_blueprint(base)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
