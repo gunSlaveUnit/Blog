@@ -20,3 +20,4 @@ SQLAlchemy==1.4.18
 uuid==1.30
 Werkzeug==2.0.1
 WTForms==2.3.3
+Pillow~=8.2.0
