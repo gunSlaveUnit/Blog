@@ -2,12 +2,15 @@
 
 from flask import Flask
 from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
 from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
+
+login_manager = LoginManager(app)
 
 db = SQLAlchemy(app)
 from web.users.models import User

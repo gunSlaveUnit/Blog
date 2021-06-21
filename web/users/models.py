@@ -1,11 +1,17 @@
 import uuid
 
+from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql import UUID
 
-from manage import db
+from manage import db, login_manager
 
 
-class User(db.Model):
+@login_manager.user_loader
+def load_user(user_uuid):
+    return User.query.get(user_uuid)
+
+
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     uuid = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -14,3 +20,11 @@ class User(db.Model):
     image = db.Column(db.String(50), nullable=False, default='default.png')
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
+
+    def __init__(self, username, email, password):
+        self.username = username
+        self.email = email
+        self.password = password
+
+    def get_id(self):
+        return self.uuid
