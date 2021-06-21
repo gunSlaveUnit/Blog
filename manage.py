@@ -11,6 +11,8 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 login_manager = LoginManager(app)
+login_manager.login_view = 'users.login'
+login_manager.login_message_category = 'info'
 
 db = SQLAlchemy(app)
 from web.users.models import User
