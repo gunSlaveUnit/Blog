@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint
+from flask import render_template, Blueprint, flash, redirect, url_for
 
 from web.users.forms import RegistrationForm, LoginForm
 
@@ -8,6 +8,9 @@ users = Blueprint('users', __name__)
 @users.route('/registration', methods=['GET', 'POST'])
 def registration():
     registration_form = RegistrationForm()
+    if registration_form.validate_on_submit():
+        flash(f'Account was created for {registration_form.username.data}', 'success')
+        return redirect(url_for('base.home'))
     return render_template('registration.html', form=registration_form)
 
 
