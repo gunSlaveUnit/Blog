@@ -1,6 +1,8 @@
 from flask import render_template, Blueprint, flash, redirect, url_for
 
+from manage import bcrypt, db
 from web.users.forms import RegistrationForm, LoginForm
+from web.users.models import User
 
 users = Blueprint('users', __name__)
 
@@ -9,8 +11,14 @@ users = Blueprint('users', __name__)
 def registration():
     registration_form = RegistrationForm()
     if registration_form.validate_on_submit():
-        flash(f'Account was created for {registration_form.username.data}', 'success')
-        return redirect(url_for('base.home'))
+        hashed_password = bcrypt.generate_password_hash(registration_form.password.data).decode('utf-8')
+        user = User(username=registration_form.username.data,
+                    email=registration_form.email.data,
+                    password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash(f'You account has been created', 'success')
+        return redirect(url_for('users.login'))
     return render_template('registration.html', form=registration_form)
 
 
