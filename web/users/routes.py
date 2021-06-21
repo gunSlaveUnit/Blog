@@ -2,8 +2,9 @@ from flask import render_template, Blueprint, flash, redirect, url_for, request
 from flask_login import login_user, current_user, logout_user, login_required
 
 from manage import bcrypt, db
-from web.users.forms import RegistrationForm, LoginForm
+from web.users.forms import RegistrationForm, LoginForm, AccountUpdateForm
 from web.users.models import User
+from web.users.utils import save_user_account_image
 
 users = Blueprint('users', __name__)
 
@@ -48,7 +49,21 @@ def logout():
     return redirect(url_for('base.home'))
 
 
-@users.route('/account')
+@users.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
-    return render_template('account.html', title='Account')
+    account_update_form = AccountUpdateForm()
+    if account_update_form.validate_on_submit():
+        if account_update_form.image.data:
+            image_name = save_user_account_image(account_update_form.image.data)
+            current_user.image = image_name
+        current_user.username = account_update_form.username.data
+        current_user.email = account_update_form.email.data
+        db.session.commit()
+        flash('Your account has been updated', 'success')
+        return redirect(url_for('users.account'))
+    elif request.method == 'GET':
+        account_update_form.username.data = current_user.username
+        account_update_form.email.data = current_user.email
+    image = url_for('static', filename='media/users/' + current_user.image)
+    return render_template('account.html', title='Account', image=image, form=account_update_form)
