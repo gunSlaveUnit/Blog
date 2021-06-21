@@ -17,4 +17,9 @@ def registration():
 @users.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm()
+    if login_form.validate_on_submit():
+        flash('You have been logged in', 'success')
+        return redirect(url_for('base.home'))
+    else:
+        flash('Login unsuccessful. Check username and password', 'danger')
     return render_template('login.html', form=login_form)
