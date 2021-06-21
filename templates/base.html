@@ -11,6 +11,13 @@
     <link rel="stylesheet" href="../static/reset.css">
 </head>
 <body>
+    <div>
+        <nav>
+            <a href="{{ url_for('users.login') }}">Sign In</a>
+            <a href="{{ url_for('users.registration') }}">Sign Up</a>
+        </nav>
+    </div>
+
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
