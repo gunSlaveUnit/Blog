@@ -12,6 +12,7 @@ app.register_blueprint(base)
 app.register_blueprint(users)
 
 db = SQLAlchemy(app)
+db.create_all()
 
 
 if __name__ == '__main__':
