@@ -13,8 +13,13 @@
 <body>
     <div>
         <nav>
-            <a href="{{ url_for('users.login') }}">Sign In</a>
-            <a href="{{ url_for('users.registration') }}">Sign Up</a>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('users.account') }}">Account</a>
+                <a href="{{ url_for('users.logout') }}">Sign Out</a>
+            {% else %}
+                <a href="{{ url_for('users.login') }}">Sign In</a>
+                <a href="{{ url_for('users.registration') }}">Sign Up</a>
+            {% endif %}
         </nav>
     </div>
 
