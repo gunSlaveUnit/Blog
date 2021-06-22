@@ -4,6 +4,8 @@ from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail
+from flask_wtf import CSRFProtect
 
 from config import Config
 
@@ -20,6 +22,8 @@ from web.posts.models import Post
 db.create_all()
 db.session.commit()
 bcrypt = Bcrypt(app)
+mail = Mail(app)
+csrf = CSRFProtect(app)
 
 from web.base.routes import base
 from web.users.routes import users

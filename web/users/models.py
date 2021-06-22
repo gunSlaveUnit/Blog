@@ -1,9 +1,11 @@
 import uuid
 
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql import UUID
 
 from manage import db, login_manager
+from config import Config
 
 
 @login_manager.user_loader
@@ -28,3 +30,16 @@ class User(db.Model, UserMixin):
 
     def get_id(self):
         return self.uuid
+
+    def get_reset_token(self, expires_sec=30*60):
+        s = Serializer(Config.SECRET_KEY, expires_sec)
+        return s.dumps({'user_uuid': self.uuid}).decode('utf-8')
+
+    @staticmethod
+    def verify_reset_token(token):
+        s = Serializer(Config.SECRET_KEY)
+        try:
+            user_uuid = s.loads(token)['user_uuid']
+        except:
+            return None
+        return User.query.get(user_uuid)
