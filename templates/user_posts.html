@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>FLASKBLOG</h1>
+    <h1>Posts By {{ user.username }}</h1>
     {% for post in posts.items %}
         <a href="{{ url_for('posts.show_post', post_uuid=post.uuid) }}">
             <div>
                 <img alt="User Profile Image" src="{{ url_for('static', filename='media/users/'+post.author.image) }}">
                 {{ post.title }}
-                <a href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
+                {{ post.author.username }}
                 {{ post.date.strftime('%Y-%m-%d') }}
                 {{ post.content }}
             </div>
@@ -15,9 +15,9 @@
     {% for page_number in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
         {% if page_number %}
             {% if posts.page == page_number %}
-                <a href="{{ url_for('base.home', page=page_number) }}">{{ page_number }}</a>
+                <a href="{{ url_for('users.user_posts', username=user.username, page=page_number) }}">{{ page_number }}</a>
             {% else %}
-                <a href="{{ url_for('base.home', page=page_number) }}">{{ page_number }}</a>
+                <a href="{{ url_for('users.user_posts', username=user.username, page=page_number) }}">{{ page_number }}</a>
             {% endif %}
         {% else %}
             ...

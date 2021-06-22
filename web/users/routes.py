@@ -2,6 +2,7 @@ from flask import render_template, Blueprint, flash, redirect, url_for, request
 from flask_login import login_user, current_user, logout_user, login_required
 
 from manage import bcrypt, db
+from web.posts.models import Post
 from web.users.forms import RegistrationForm, LoginForm, AccountUpdateForm
 from web.users.models import User
 from web.users.utils import save_user_account_image
@@ -67,3 +68,13 @@ def account():
         account_update_form.email.data = current_user.email
     image = url_for('static', filename='media/users/' + current_user.image)
     return render_template('account.html', title='Account', image=image, form=account_update_form)
+
+
+@users.route("/user/<string:username>")
+def user_posts(username):
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    posts = Post.query.filter_by(author=user)\
+        .order_by(Post.date.desc())\
+        .paginate(page=page, per_page=5)
+    return render_template('user_posts.html', posts=posts, user=user)
