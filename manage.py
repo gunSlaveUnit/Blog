@@ -8,6 +8,7 @@ from flask_mail import Mail
 from flask_wtf import CSRFProtect
 
 from config import Config
+from web.errors.handlers import errors
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -33,6 +34,7 @@ from web.posts.routes import posts
 app.register_blueprint(base)
 app.register_blueprint(users)
 app.register_blueprint(posts)
+app.register_blueprint(errors)
 
 
 if __name__ == '__main__':
