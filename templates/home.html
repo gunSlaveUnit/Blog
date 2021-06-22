@@ -1,4 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Home</h1>
+    <h1>FLASKBLOG</h1>
+    {% for post in posts %}
+        <a href="{{ url_for('posts.show_post', post_uuid=post.uuid) }}">
+            <div>
+                <img alt="User Profile Image" src="{{ url_for('static', filename='media/users/'+post.author.image) }}">
+                {{ post.title }}
+                {{ post.author.username }}
+                {{ post.date.strftime('%Y-%m-%d') }}
+                {{ post.content }}
+            </div>
+        </a>
+    {% endfor %}
 {% endblock %}

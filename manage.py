@@ -23,10 +23,12 @@ bcrypt = Bcrypt(app)
 
 from web.base.routes import base
 from web.users.routes import users
+from web.posts.routes import posts
 
 
 app.register_blueprint(base)
 app.register_blueprint(users)
+app.register_blueprint(posts)
 
 
 if __name__ == '__main__':
