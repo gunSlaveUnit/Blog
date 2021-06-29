@@ -4,7 +4,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql import UUID
 
-from manage import db, login_manager
+from services import db, login_manager
 from config import Config
 
 

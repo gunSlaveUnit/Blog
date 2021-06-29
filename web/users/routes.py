@@ -2,7 +2,7 @@ from flask import render_template, Blueprint, flash, redirect, url_for, request
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 
-from manage import bcrypt, db, mail
+from services import bcrypt, db, mail
 from web.posts.models import Post
 from web.users.forms import RegistrationForm, LoginForm, AccountUpdateForm, ResetPasswordForm, RequestResetForm
 from web.users.models import User

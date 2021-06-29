@@ -3,7 +3,7 @@ import secrets
 
 from PIL import Image
 
-from manage import app
+from services import app
 
 
 def save_user_account_image(image):

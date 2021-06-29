@@ -3,7 +3,7 @@ from datetime import datetime
 
 from sqlalchemy.dialects.postgresql import UUID
 
-from manage import db
+from services import db
 
 
 class Post(db.Model):

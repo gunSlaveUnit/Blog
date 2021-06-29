@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, redirect, url_for, render_template, abort, request
 from flask_login import login_required, current_user
 
-from manage import db
+from services import db
 from web.posts.forms import PostForm
 from web.posts.models import Post
 
