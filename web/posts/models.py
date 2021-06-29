@@ -2,11 +2,12 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy_serializer import SerializerMixin
 
 from services import db
 
 
-class Post(db.Model):
+class Post(db.Model, SerializerMixin):
     __tablename__ = 'posts'
 
     uuid = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)

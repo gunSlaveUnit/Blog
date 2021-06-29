@@ -12,5 +12,7 @@ def home():
     posts = cache.get(f'posts_{page}')
     if posts is None:
         posts = Post.query.order_by(Post.date.desc()).paginate(page=page, per_page=5)
-        cache.set(f'posts_{page}', posts)
+        # for post in posts.items():
+            # print(post)
+        # cache.set(f'posts_{page}', posts)
     return render_template('home.html', title='Home', posts=posts)
