@@ -29,7 +29,7 @@ csrf = CSRFProtect(app)
 cache = Cache()
 cache_servers = os.environ.get('MEMCACHIER_SERVERS')
 if cache_servers is None:
-    cache.init_app(app, config={'CACHE_TYPE': 'simple'})
+    cache.init_app(app, config={'CACHE_TYPE': 'memcached'})
 else:
     cache_user = os.environ.get('MEMCACHIER_USERNAME') or ''
     cache_pass = os.environ.get('MEMCACHIER_PASSWORD') or ''
