@@ -3,6 +3,7 @@ import uuid
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy_serializer import SerializerMixin
 
 from services import db, login_manager
 from config import Config
@@ -13,8 +14,9 @@ def load_user(user_uuid):
     return User.query.get(user_uuid)
 
 
-class User(db.Model, UserMixin):
+class User(db.Model, UserMixin, SerializerMixin):
     __tablename__ = 'users'
+    serialize_rules = ('-posts.author.posts',)
 
     uuid = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     username = db.Column(db.String(20), unique=True, nullable=False)

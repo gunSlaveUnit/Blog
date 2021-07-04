@@ -2,7 +2,7 @@ from flask import render_template, Blueprint, flash, redirect, url_for, request
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 
-from services import bcrypt, db, mail
+from services import bcrypt, db, mail, cache
 from web.posts.models import Post
 from web.users.forms import RegistrationForm, LoginForm, AccountUpdateForm, ResetPasswordForm, RequestResetForm
 from web.users.models import User
@@ -12,6 +12,7 @@ users = Blueprint('users', __name__)
 
 
 @users.route('/registration', methods=['GET', 'POST'])
+@cache.cached(timeout=60)
 def registration():
     if current_user.is_authenticated:
         return redirect(url_for('base.home'))
@@ -29,6 +30,7 @@ def registration():
 
 
 @users.route('/login', methods=['GET', 'POST'])
+@cache.cached(timeout=60)
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('base.home'))
@@ -46,12 +48,14 @@ def login():
 
 
 @users.route("/logout")
+@cache.cached(timeout=60)
 def logout():
     logout_user()
     return redirect(url_for('base.home'))
 
 
 @users.route('/account', methods=['GET', 'POST'])
+@cache.cached(timeout=60)
 @login_required
 def account():
     account_update_form = AccountUpdateForm()
@@ -72,6 +76,7 @@ def account():
 
 
 @users.route("/user/<string:username>")
+@cache.cached(timeout=60)
 def user_posts(username):
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
@@ -82,6 +87,7 @@ def user_posts(username):
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])
+@cache.cached(timeout=60)
 def reset_request():
     def send_reset_email(user):
         token = user.get_reset_token()
@@ -106,6 +112,7 @@ def reset_request():
 
 
 @users.route("/reset_password/<token>", methods=['GET', 'POST'])
+@cache.cached(timeout=60)
 def reset_token(token):
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))

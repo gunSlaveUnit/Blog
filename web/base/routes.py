@@ -7,12 +7,8 @@ base = Blueprint('base', __name__)
 
 
 @base.route('/')
+@cache.cached(timeout=60)
 def home():
     page = request.args.get('page', 1, type=int)
-    posts = cache.get(f'posts_{page}')
-    if posts is None:
-        posts = Post.query.order_by(Post.date.desc()).paginate(page=page, per_page=5)
-        # for post in posts.items():
-            # print(post)
-        # cache.set(f'posts_{page}', posts)
+    posts = Post.query.order_by(Post.date.desc()).paginate(page=page, per_page=5)
     return render_template('home.html', title='Home', posts=posts)

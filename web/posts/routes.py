@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, redirect, url_for, render_template, abort, request
 from flask_login import login_required, current_user
 
-from services import db
+from services import db, cache
 from web.posts.forms import PostForm
 from web.posts.models import Post
 
@@ -9,6 +9,7 @@ posts = Blueprint('posts', __name__)
 
 
 @posts.route("/post/new", methods=['GET', 'POST'])
+@cache.cached(timeout=60)
 @login_required
 def make_new_post():
     new_post = PostForm()
@@ -23,12 +24,14 @@ def make_new_post():
 
 
 @posts.route("/post/<post_uuid>")
+@cache.cached(timeout=60)
 def show_post(post_uuid):
     post_to_show = Post.query.get_or_404(post_uuid)
     return render_template('post.html', title=post_to_show.title, post=post_to_show)
 
 
 @posts.route("/post/<post_uuid>/update", methods=['GET', 'POST'])
+@cache.cached(timeout=60)
 @login_required
 def update_post(post_uuid):
     post = Post.query.get_or_404(post_uuid)
@@ -49,6 +52,7 @@ def update_post(post_uuid):
 
 
 @posts.route("/post/<post_uuid>/delete", methods=['GET', 'POST'])
+@cache.cached(timeout=60)
 @login_required
 def delete_post(post_uuid):
     post = Post.query.get_or_404(post_uuid)

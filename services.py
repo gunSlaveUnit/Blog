@@ -18,6 +18,8 @@ login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
 
 db = SQLAlchemy(app)
+from web.posts.models import Post
+from web.users.models import User
 db.create_all()
 db.session.commit()
 bcrypt = Bcrypt(app)
