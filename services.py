@@ -1,3 +1,5 @@
+# TODO: read more about memcached, we don't configure that
+
 import os
 
 from flask import Flask
